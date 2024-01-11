@@ -2,11 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Extensions
 {
@@ -18,6 +13,8 @@ namespace Infrastructure.Extensions
             services.AddDbContext<SampleDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
             );
+
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
     }
 }

@@ -31,6 +31,10 @@ namespace Application.Extensions
 
             // Đăng ký Service Background notice
             services.AddHostedService<NoticeService>();
+            services.AddHostedService<Notice2Service>();
+            services.AddHostedService<GPSCollectorsService>();
+            services.AddHostedService<GPSHistoryService>();
+            services.AddHostedService<GPSRealtimeService>();
 
             return services;
         }

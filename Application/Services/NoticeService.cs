@@ -1,12 +1,12 @@
 ﻿using Application.Interfaces;
-using Application.RabbitMQ;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
+    /// <summary>
+    /// Sử dụng Worker Service (dịch vụ chạy nền) để chạy liên tục khi ứng dụng hoạt động.
+    /// Cung cấp một service nhận tin nhắn và xử lý thông báo
+    /// </summary>
     public class NoticeService : BackgroundService
     {
         private readonly IRabbitMQConsumer _rabbitMQConsumer;
@@ -18,11 +18,19 @@ namespace Application.Services
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            //_rabbitMQConsumer.ConsumeMessages("user_created_queue", message =>
-            //{
-            //    // Xử lý message ở đây
-            //    Console.WriteLine($"Service received message: {message}");
-            //});
+            // Duyệt qua danh sách các tenant
+            List<string> tenants = new List<string> { "tenant1", "tenant2", "tenant3", "tenant4", "tenant5" };
+
+            foreach (var tenantId in tenants)
+            {
+                string queueName = $"{tenantId}_queue";
+
+                _rabbitMQConsumer.ConsumeMessages(queueName, message =>
+                {
+                    // Xử lý message ở đây
+                    Console.WriteLine($"{tenantId} da nhan duoc tin nhan: {message}");
+                });
+            }
 
             return Task.CompletedTask;
         }

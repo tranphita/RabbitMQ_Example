@@ -54,5 +54,27 @@ namespace SampleApi.Controllers
 
             return Ok($"User with ID {userId} deleted successfully.");
         }
+
+        /// <summary>
+        /// Gửi tin nhắn cho tất cả các tenant
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("sendNoticeAll")]
+        public IActionResult SendNoticeAll()
+        {
+            _userService.SendNoticeAll();
+            return Ok("Gui thong báo thanh cong");
+        }
+
+        /// <summary>
+        /// Gửi tin nhắn cho một nhóm tenant
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("sendNoticeForGroup")]
+        public IActionResult SendNoticeForGroup()
+        {
+            _userService.SendNoticeForGroup();
+            return Ok("Gui thong báo thanh cong");
+        }
     }
 }

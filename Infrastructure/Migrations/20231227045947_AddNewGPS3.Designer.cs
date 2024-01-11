@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SampleDbContext))]
-    partial class SampleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231227045947_AddNewGPS3")]
+    partial class AddNewGPS3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,13 +26,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.GPS3", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.Property<string>("VehicleCode")
+                        .HasColumnType("text");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("CreatedTime")
+                    b.Property<DateTime>("CreatedTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Date")
@@ -39,13 +38,16 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Detail")
                         .HasColumnType("jsonb");
 
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<int>("Total")
                         .HasColumnType("integer");
 
-                    b.Property<string>("VehicleCode")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
+                    b.HasKey("VehicleCode");
 
                     b.ToTable("gps3", (string)null);
                 });

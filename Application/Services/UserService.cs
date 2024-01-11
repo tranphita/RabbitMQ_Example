@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Persistence;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Application.Services
 {
@@ -32,13 +34,13 @@ namespace Application.Services
             // Xử lý gửi Message vào queue
 
             // 1. Chuẩn bị thông điệp
-            string message = $"New user created: {userName}";
+            string message = $"User moi duoc tao: {userName}";
 
             // 2. Tên queue để xuất bản tin nhắn
-            string queueName = "user_created_queue";
+            string routingKey = "user_create_queue";
 
             // 3. Gọi phương thức để xuất bản tin nhắn
-            _rabbitMQPublisher.PublishMessage("", queueName, message);
+            _rabbitMQPublisher.PublishMessage("", routingKey, message);
 
             return newUser.Id;
         }
@@ -55,13 +57,13 @@ namespace Application.Services
                 // Xử lý gửi Message vào queue
 
                 // 1. Chuẩn bị thông điệp
-                string message = $"Update user name: {newUserName}";
+                string message = $"Cap nhat user: {newUserName}";
 
                 // 2. Tên queue để xuất bản tin nhắn
-                string queueName = "user_update_queue";
+                string routingKey = "user_update_queue";
 
                 // 3. Gọi phương thức để xuất bản tin nhắn
-                _rabbitMQPublisher.PublishMessage("", queueName, message);
+                _rabbitMQPublisher.PublishMessage("", routingKey, message);
             }
 
             return existingUser;
@@ -79,14 +81,43 @@ namespace Application.Services
                 // Xử lý gửi Message vào queue
 
                 // 1. Chuẩn bị thông điệp
-                string message = $"Delete user name: {userToRemove.Name}";
+                string message = $"Xoa user: {userToRemove.Name}";
 
                 // 2. Tên queue để xuất bản tin nhắn
-                string queueName = "user_delete_queue";
+                string routingKey = "user_delete_queue";
 
                 // 3. Gọi phương thức để xuất bản tin nhắn
-                _rabbitMQPublisher.PublishMessage("", queueName, message);
+                _rabbitMQPublisher.PublishMessage("", routingKey, message);
             }
+
+            return 0;
+        }
+
+
+        public int SendNoticeAll()
+        {
+            // Xử lý gửi message vào queue
+
+            // 1. Chuẩn bị thông điệp
+            string message = "Thong bao bao tri he thong! vào ngày 2023-12-28";
+            string routingKey = "";
+
+            // 2. Gọi phương thức để xuất bản tin nhắn
+            _rabbitMQPublisher.PublishMessage("fanout_exchange", routingKey, message);
+
+            return 0;
+        }
+
+        public int SendNoticeForGroup()
+        {
+            // Xử lý gửi message vào queue
+
+            // 1. Chuẩn bị thông điệp
+            string message = "Thong bao het han su dung ban Pro!";
+            string routingKey = "premium";
+
+            // 2. Gọi phương thức để xuất bản tin nhắn
+            _rabbitMQPublisher.PublishMessage("direct_exchange", routingKey, message);
 
             return 0;
         }
